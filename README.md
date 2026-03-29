@@ -1,5 +1,3 @@
-# healthcare-scheduler
-Healthcare Appointment Scheduler: A production-ready CRUD API utilizing Spring Boot, and JPA. Implements complex doctor-patient scheduling logic.
 # Healthcare Appointment Scheduler
 
 A backend system for managing patient appointments with doctors across different time zones.  

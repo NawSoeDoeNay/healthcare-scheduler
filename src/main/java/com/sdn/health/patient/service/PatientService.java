@@ -63,12 +63,13 @@ public class PatientService {
     }
 
     @Transactional
-    public void deletePatient(Long id) {
+    public Long deletePatient(Long id) {
 
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
         patientRepository.delete(patient);
+        return patient.getId();
     }
 
 }

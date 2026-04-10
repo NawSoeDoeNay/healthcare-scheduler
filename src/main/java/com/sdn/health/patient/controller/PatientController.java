@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,22 @@ public class PatientController {
     ) {
         PatientDto patients = patientService.getPatientById(id);
         return ResponseEntity.ok(patients);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<PatientDto> updatePatient(
+            @PathVariable Long id,
+           @Valid @RequestBody PatientReqDto dto
+    ) {
+        PatientDto patients = patientService.updatePatient(id, dto);
+        return ResponseEntity.ok(patients);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deletePatient(
+            @PathVariable Long id
+    ){
+        return ResponseEntity.ok(patientService.deletePatient(id));
     }
 
 }

@@ -16,7 +16,10 @@ public enum ErrorCode {
 
     // Patient
     PATIENT_NOT_FOUND("P404", "Patient not found", HttpStatus.NOT_FOUND),
-    PATIENT_ALREADY_EXISTS("P409", "Patient already exists", HttpStatus.CONFLICT);
+    PATIENT_ALREADY_EXISTS("P409", "Patient already exists", HttpStatus.CONFLICT),
+
+    //Doctor
+    DOCTOR_NOT_FOUND("D404","Doctor not found" ,HttpStatus.NOT_FOUND );
 
     private final String code;
     private final String message;

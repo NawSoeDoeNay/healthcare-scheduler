@@ -1,5 +1,6 @@
 package com.sdn.health.doctor.model;
 
+import com.sdn.health.common.code.constants.ExperienceLevel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,5 +27,6 @@ public class Doctor {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private int experience;
+    @Enumerated(EnumType.STRING)
+    private ExperienceLevel experience;
 }

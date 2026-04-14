@@ -37,7 +37,7 @@ public class DoctorController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<DoctorResponseDto> getDoctorByName(@RequestParam String name) {
+    public ResponseEntity<List<DoctorResponseDto>> getDoctorByName(@RequestParam String name) {
         return ResponseEntity.ok(service.getDoctorByName(name));
     }
 
@@ -50,8 +50,8 @@ public class DoctorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteDoctor(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {
         service.deleteDoctor(id);
-        return ResponseEntity.ok(service.deleteDoctor(id));
+        return ResponseEntity.noContent().build();
     }
 }

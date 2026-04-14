@@ -10,6 +10,7 @@ import com.sdn.health.common.error.ErrorCode;
 import com.sdn.health.doctor.repo.DoctorRepository;
 import com.sdn.health.patient.repo.PatientRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +55,16 @@ public class AppointmentService {
         if(exists){
             throw new CustomException(ErrorCode.APPOINTMENT_CONFLICT);
         }
+        boolean patientConflict = appointmentRepository
+                .existsByPatientIdAndStartTimeLessThanAndEndTimeGreaterThan(
+                        dto.getPatientId(),
+                        dto.getEndTime(),
+                        dto.getStartTime()
+                );
+
+        if (patientConflict) {
+            throw new CustomException(ErrorCode.APPOINTMENT_CONFLICT);
+        }
         // save
         Appointment appointment = Appointment.builder().
                 patientId(dto.getPatientId())
@@ -80,6 +91,14 @@ public class AppointmentService {
         return appointmentRepository.findAll()
                 .stream()
                 .filter(a -> a.getDoctorId().equals(doctorId))
+                .map(AppointmentDto::fromEntity)
+                .toList();
+    }
+
+    public List<AppointmentDto> getAppointmentsByPatient(Long patientId) {
+        return appointmentRepository.findAll()
+                .stream()
+                .filter(a -> a.getPatientId().equals(patientId))
                 .map(AppointmentDto::fromEntity)
                 .toList();
     }

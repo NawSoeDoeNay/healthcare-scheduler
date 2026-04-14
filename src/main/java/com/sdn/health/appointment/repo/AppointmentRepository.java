@@ -12,4 +12,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             ZonedDateTime endTime,
             ZonedDateTime startTime
     );
+
+    boolean existsByPatientIdAndStartTimeLessThanAndEndTimeGreaterThan(
+            Long patientId,
+            ZonedDateTime endTime,
+            ZonedDateTime startTime
+    );
 }

@@ -19,7 +19,10 @@ public enum ErrorCode {
     PATIENT_ALREADY_EXISTS("P409", "Patient already exists", HttpStatus.CONFLICT),
 
     //Doctor
-    DOCTOR_NOT_FOUND("D404","Doctor not found" ,HttpStatus.NOT_FOUND );
+    DOCTOR_NOT_FOUND("D404","Doctor not found" ,HttpStatus.NOT_FOUND ),
+
+    // Appointment
+    APPOINTMENT_CONFLICT("A409","Appointment conflict." ,HttpStatus.CONFLICT );
 
     private final String code;
     private final String message;

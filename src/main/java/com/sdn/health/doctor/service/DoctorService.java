@@ -46,10 +46,12 @@ public class DoctorService {
     }
 
     @Transactional(readOnly = true)
-    public DoctorResponseDto getDoctorByName(String name){
-        Doctor doctor = doctorJpaRepository.findByNameContainingIgnoreCase(name)
+    public List<DoctorResponseDto> getDoctorByName(String name){
+        List<Doctor> doctors = doctorJpaRepository.findByNameContainingIgnoreCase(name)
                 .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));
-        return DoctorResponseDto.fromEntity(doctor);
+        return doctors.stream()
+                .map(DoctorResponseDto::fromEntity)
+                .toList();
     }
 
     @Transactional
@@ -68,15 +70,15 @@ public class DoctorService {
     }
 
     @Transactional
-    public Long deleteDoctor(Long id) {
+    public void deleteDoctor(Long id) {
 
         Doctor doctor = doctorJpaRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));
 
         doctorJpaRepository.delete(doctor);
-        return doctor.getId();
     }
 
+    @Transactional(readOnly = true)
     public  DoctorResponseDto getDoctorById(Long id) {
         Doctor doctor = doctorJpaRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));

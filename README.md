@@ -1,14 +1,13 @@
 # Healthcare Appointment Scheduler
 
 A backend system for managing patient appointments with doctors across different time zones.  
-Built with **Java Spring Boot** for the backend and optionally **React** for frontend UI.
+Built with **Java Spring Boot** for the backend and optionally **Angular** for frontend UI.
 
 ---
 
 ## 🏷️ Project Overview
 
 - Users can book, view, and manage appointments.
-- Doctors can view their schedules and confirm or cancel appointments.
 - Handles overlapping bookings and validates appointment times.
 - Uses **Clean Architecture**: separates Domain, Service, Repository, and Controller layers.
 

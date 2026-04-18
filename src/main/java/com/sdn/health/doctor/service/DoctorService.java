@@ -58,10 +58,10 @@ public class DoctorService {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));
 
-        doctor.setName(dto.getName());
-        doctor.setEmail(dto.getEmail());
-        doctor.setSpecialization(dto.getSpecialization());
-        doctor.setExperience(dto.getLevel());
+        if (dto.getName() != null) doctor.setName(dto.getName());
+        if (dto.getEmail() != null) doctor.setEmail(dto.getEmail());
+        if (dto.getSpecialization() != null) doctor.setSpecialization(dto.getSpecialization());
+        if (dto.getLevel() != null) doctor.setExperience(dto.getLevel());
 
         doctorRepository.save(doctor);
         return DoctorResponseDto.fromEntity(doctor);

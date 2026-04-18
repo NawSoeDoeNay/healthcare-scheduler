@@ -24,18 +24,16 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
-
+    
     @Transactional
     public AppointmentDto bookAppointment(AppointmentReqDto dto){
 
-        // validate doctor and patient exist
         doctorRepository.findById(dto.getDoctorId())
                 .orElseThrow(() -> new CustomException(ErrorCode.DOCTOR_NOT_FOUND));
 
         patientRepository.findById(dto.getPatientId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PATIENT_NOT_FOUND));
 
-        // validate time
         if(dto.getStartTime().isAfter(dto.getEndTime())){
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
@@ -44,38 +42,39 @@ public class AppointmentService {
             throw new CustomException(ErrorCode.INVALID_REQUEST);
         }
 
-        // check overlapping
-        boolean exists = appointmentRepository.
-                existsByDoctorIdAndStartTimeLessThanAndEndTimeGreaterThan(
-                dto.getDoctorId(),
-                dto.getEndTime(),
-                dto.getStartTime()
-        );
+        boolean doctorConflict =
+                appointmentRepository.existsByDoctorIdAndStartTimeLessThanAndEndTimeGreaterThan(
+                        dto.getDoctorId(),
+                        dto.getEndTime(),
+                        dto.getStartTime()
+                );
 
-        if(exists){
+        if(doctorConflict){
             throw new CustomException(ErrorCode.APPOINTMENT_CONFLICT);
         }
-        boolean patientConflict = appointmentRepository
-                .existsByPatientIdAndStartTimeLessThanAndEndTimeGreaterThan(
+
+        boolean patientConflict =
+                appointmentRepository.existsByPatientIdAndStartTimeLessThanAndEndTimeGreaterThan(
                         dto.getPatientId(),
                         dto.getEndTime(),
                         dto.getStartTime()
                 );
 
-        if (patientConflict) {
+        if(patientConflict){
             throw new CustomException(ErrorCode.APPOINTMENT_CONFLICT);
         }
-        // save
-        Appointment appointment = Appointment.builder().
-                patientId(dto.getPatientId())
+
+        Appointment appointment = Appointment.builder()
+                .patientId(dto.getPatientId())
                 .doctorId(dto.getDoctorId())
                 .startTime(dto.getStartTime())
                 .endTime(dto.getEndTime())
                 .status(AppointmentStatus.BOOKED)
                 .build();
 
-        appointmentRepository.save(appointment);
-        return AppointmentDto.fromEntity(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+
+        return AppointmentDto.fromEntity(saved);
     }
 
     @Transactional
